@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { Menu, Bell, ChevronDown, Search, LayoutDashboard, Users, Calendar, Settings, Menu as MenuIcon } from 'lucide-react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 
 const Header: React.FC = () => {
+  const navigate = useNavigate();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
@@ -22,10 +23,34 @@ const Header: React.FC = () => {
     { name: 'Settings', path: '/settings', icon: Settings },
   ];
 
+  const handleProfileAction = (action: string) => {
+    switch (action) {
+      case 'profile':
+        navigate('/settings');
+        break;
+      case 'settings':
+        navigate('/settings');
+        break;
+      case 'help':
+        window.open('https://support.healthcareclinic.com', '_blank');
+        break;
+      case 'signout':
+        // Implement sign out logic here
+        navigate('/');
+        break;
+    }
+    setIsProfileOpen(false);
+  };
+
+  const handleNotificationClick = (id: number) => {
+    // Implement notification handling logic
+    console.log(`Notification ${id} clicked`);
+    setIsNotificationsOpen(false);
+  };
+
   return (
     <header className="bg-white border-b border-gray-200">
       <div className="flex items-center justify-between px-4 py-3">
-        {/* Mobile menu button */}
         <button 
           className="md:hidden text-gray-500 hover:text-gray-700 focus:outline-none"
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
@@ -33,7 +58,6 @@ const Header: React.FC = () => {
           <MenuIcon className="w-6 h-6" />
         </button>
 
-        {/* Search bar */}
         <div className="hidden md:flex-1 md:flex md:max-w-md">
           <div className="relative w-full">
             <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
@@ -47,9 +71,7 @@ const Header: React.FC = () => {
           </div>
         </div>
 
-        {/* Right side buttons */}
         <div className="flex items-center space-x-3">
-          {/* Notifications */}
           <div className="relative">
             <button
               className="p-2 text-gray-500 rounded-full hover:bg-gray-100 focus:outline-none"
@@ -64,7 +86,6 @@ const Header: React.FC = () => {
               </span>
             </button>
 
-            {/* Notifications dropdown */}
             {isNotificationsOpen && (
               <div className="absolute right-0 mt-2 w-80 bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 z-50">
                 <div className="p-3 border-b border-gray-200">
@@ -72,14 +93,21 @@ const Header: React.FC = () => {
                 </div>
                 <div className="max-h-80 overflow-y-auto">
                   {notifications.map((notification) => (
-                    <div key={notification.id} className="px-4 py-3 hover:bg-gray-50 border-b border-gray-100">
+                    <div 
+                      key={notification.id} 
+                      className="px-4 py-3 hover:bg-gray-50 border-b border-gray-100 cursor-pointer"
+                      onClick={() => handleNotificationClick(notification.id)}
+                    >
                       <p className="text-sm text-gray-700">{notification.text}</p>
                       <p className="text-xs text-gray-500 mt-1">{notification.time}</p>
                     </div>
                   ))}
                 </div>
                 <div className="p-2 border-t border-gray-200">
-                  <button className="block w-full text-center text-sm font-medium text-cyan-600 hover:text-cyan-700 px-4 py-2">
+                  <button 
+                    className="block w-full text-center text-sm font-medium text-cyan-600 hover:text-cyan-700 px-4 py-2"
+                    onClick={() => navigate('/notifications')}
+                  >
                     View all notifications
                   </button>
                 </div>
@@ -87,7 +115,6 @@ const Header: React.FC = () => {
             )}
           </div>
 
-          {/* Profile dropdown */}
           <div className="relative">
             <button
               className="flex items-center space-x-2 focus:outline-none"
@@ -105,23 +132,34 @@ const Header: React.FC = () => {
               <ChevronDown className="hidden md:inline-block w-4 h-4 text-gray-500" />
             </button>
 
-            {/* Profile menu */}
             {isProfileOpen && (
               <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 z-50">
                 <div className="py-1">
-                  <a href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                  <button 
+                    onClick={() => handleProfileAction('profile')} 
+                    className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                  >
                     Your Profile
-                  </a>
-                  <a href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                  </button>
+                  <button 
+                    onClick={() => handleProfileAction('settings')} 
+                    className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                  >
                     Settings
-                  </a>
-                  <a href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                  </button>
+                  <button 
+                    onClick={() => handleProfileAction('help')} 
+                    className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                  >
                     Help & Support
-                  </a>
+                  </button>
                   <div className="border-t border-gray-100"></div>
-                  <a href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                  <button 
+                    onClick={() => handleProfileAction('signout')} 
+                    className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                  >
                     Sign out
-                  </a>
+                  </button>
                 </div>
               </div>
             )}
@@ -129,7 +167,6 @@ const Header: React.FC = () => {
         </div>
       </div>
 
-      {/* Mobile menu */}
       {isMobileMenuOpen && (
         <nav className="md:hidden bg-white border-t border-gray-200">
           <div className="px-2 py-3 space-y-1">
