@@ -52,7 +52,7 @@ A comprehensive web application for managing patient follow-ups and appointment 
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/yourusername/healthcare-follow-up-reminder.git
+git clone https://github.com/andiswacyria/healthcare-follow-up-reminder.git
 cd healthcare-follow-up-reminder
 ```
 
