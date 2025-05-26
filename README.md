@@ -68,6 +68,9 @@ npm run dev
 
 The application will be available at `http://localhost:5173`
 
+Here is a link to the deployed site
+https://healthyclickers.netlify.app/
+
 ## Project Structure
 
 ```
